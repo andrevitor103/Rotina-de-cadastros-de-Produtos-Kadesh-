@@ -1,0 +1,19 @@
+* {
+	box-sizing: border-box;
+}
+
+.div-table {
+		position: relative;
+		margin-left: 2%;
+		width: 90%;
+}
+
+.voltar {
+	margin-left: 100%;
+}
+
+span {
+	color: red;
+	margin-left: 56%;
+	margin-top: 20%;
+}

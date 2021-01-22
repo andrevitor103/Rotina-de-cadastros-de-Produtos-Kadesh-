@@ -33,7 +33,7 @@
 			$inicio = $this->valorInicial($total_reg, $pagina);
 			
 			$sql = "SELECT * FROM produtos ORDER BY dataEmissao desc";
-			$limite = "SELECT *, DATE_FORMAT(dataRegistro,'%d-%m-%Y') AS `dataRegistro2` FROM produtos limit $inicio, $total_reg";
+			$limite = "SELECT *, DATE_FORMAT(dataRegistro,'%d-%m-%Y') AS `dataRegistro2` FROM produtos ORDER BY dataEmissao desc limit $inicio, $total_reg";
 
 			$sql = $this->pdo->query($sql);
 			$limite = $this->pdo->query($limite);	
@@ -49,6 +49,26 @@
 			}
 		}
 		
+		public function listarItensCadastrar($total_reg, $pagina){
+			
+			$inicio = $this->valorInicial($total_reg, $pagina);
+			
+			$sql = "SELECT * FROM produtos WHERE isnull(dataRegistro) ORDER BY dataEmissao desc";
+			$limite = "SELECT *, DATE_FORMAT(dataRegistro,'%d-%m-%Y') AS `dataRegistro2` FROM produtos WHERE isnull(dataRegistro) limit $inicio, $total_reg";
+
+			$sql = $this->pdo->query($sql);
+			$limite = $this->pdo->query($limite);	
+		
+			$tr = $sql->rowCount();
+			$tp = $tr / $total_reg;
+	
+			
+			if($sql->rowCount() > 0){
+				return $limite->fetchAll();
+			}else{
+				return array();
+			}
+		}
 		
 		public function cadastroRealizado($id){
 			$sql = "UPDATE produtos SET dataRegistro = date(NOW()) WHERE id IN(:id);";

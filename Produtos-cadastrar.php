@@ -6,18 +6,14 @@
 	$produtos = new Produtos($pdo);
 	
 	if(isset($_GET['pagina']) && $_GET['pagina'] <= 0 ){
-		header('Location: produtos-lista.php?pagina=1');
+		header('Location: produtos-cadastrar.php?pagina=1');
 	}
 	if(!isset($_GET['pagina']) && !isset($_GET['exportar'])){
-		header('Location: produtos-lista.php?pagina=1');
+		header('Location: produtos-cadastrar.php?pagina=1');
 	}
 	
 	if(isset($_GET['pagina']) && $_GET['pagina'] > intval($produtos->totalPaginas(10))){
-		header('Location: produtos-lista.php?pagina=1');
-	}
-	
-	if(isset($_GET['todos'])){
-		header('Location: produtos-lista.php?pagina=1&totalPaginas=1000');
+		header('Location: produtos-cadastrar.php?pagina=1');
 	}
 	
 	if(isset($_GET['exportar'])){
@@ -33,7 +29,7 @@
 ?>
 
 
-<span class="btn-export"><a href="produtos-lista.php?exportar"><i class="fa fa-file-excel-o" style="font-size:24px">Exportar</i></a></span>
+<span class="btn-export"><a href="produtos-cadastrar.php?exportar"><i class="fa fa-file-excel-o" style="font-size:24px">Exportar</i></a></span>
 
 
 <html lang="pt-br">
@@ -52,11 +48,10 @@
 </header>
 <body>
 
-
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
-    <li class="breadcrumb-item active" aria-current="page"><?php if(!empty($produtos->listarItensCadastrar(20,$_GET['pagina']))): ?><i class="fa fa-eye" style="font-size:24px; color: red;"></i><?php endif;?><?php if(empty($produtos->listarItensCadastrar(20,$_GET['pagina']))): ?><i class="fa fa-eye-slash" style="font-size:24px; color: green;"></i><?php endif;?><a href="produtos-cadastrar.php">Produtos cadastrar</a></li>
+    <li class="breadcrumb-item"><a href="produtos-lista.php">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><?php if(!empty($produtos->listarItensCadastrar(20,$_GET['pagina']))): ?><i class="fa fa-eye" style="font-size:24px; color: red;"></i><?php endif;?><?php if(empty($produtos->listarItensCadastrar(20,$_GET['pagina']))): ?><i class="fa fa-eye-slash" style="font-size:24px; color: green;"></i><?php endif;?>Produtos cadastrar</li>
   </ol>
 </nav>
 
@@ -81,13 +76,11 @@
 
 
 <tbody id="myTable">
-<?php
-	if(isset($_GET['totalPaginas'])){
-		$produto = $produtos->listarItens(strval($_GET['totalPaginas']),$_GET['pagina']);
-	}else if(isset($_GET['pagina']) && !isset($_GET['totalPaginas'])){
-	$produto = $produtos->listarItens(50,$_GET['pagina']);
+<?php 
+	if(isset($_GET['pagina'])){
+	$produto = $produtos->listarItensCadastrar(20,$_GET['pagina']);
 	}else{
-		$produto = $produtos->listarItens(50,1);
+		$produto = $produtos->listarItensCadastrar(20,1);
 	}
 	foreach($produto as $item): 
 ?>
@@ -113,8 +106,8 @@
 </table>
 
 <div>
-	<a href="?pagina=<?php echo $produtos->botoesPaginacao($_GET['pagina'],'+',50) ?>" class="avançar"><i class="fa fa-share" style="font-size:36px"></i></a>
-	<a href="?pagina=<?php echo $produtos->botoesPaginacao($_GET['pagina'],'-',50) ?>" class="voltar"><i class="fa fa-reply" style="font-size:36px"></i></a>
+	<a href="?pagina=<?php echo $produtos->botoesPaginacao($_GET['pagina'],'+',20) ?>" class="avançar"><i class="fa fa-share" style="font-size:36px"></i></a>
+	<a href="?pagina=<?php echo $produtos->botoesPaginacao($_GET['pagina'],'-',20) ?>" class="voltar"><i class="fa fa-reply" style="font-size:36px"></i></a>
 <div>
 </div>
 
@@ -130,8 +123,6 @@ $(document).ready(function(){
 </script>
 
 </body>
-
-
 
 <footer>
 	<b>Made by André Vitor</b>
